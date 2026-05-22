@@ -6,6 +6,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 dotenv.config();
 
 const uri = process.env.MONGODB_URI;
+// console.log(uri);
 
 const app = express();
 const PORT = process.env.PORT;
@@ -48,7 +49,7 @@ async function run() {
 
     const db = client.db("sportnest");
     const destinationCollection = db.collection("facilities");
-    // const bookingCollection = db.collection("bookings");
+    const bookingCollection = db.collection("bookings");
 
     app.get("/featured", async (req, res) => {
       const result = await destinationCollection.find().limit(4).toArray()
@@ -68,7 +69,7 @@ async function run() {
       res.json(result);
     });
 
-    app.get("/destination/:id", async (req, res) => {
+    app.get("/facility/:id", async (req, res) => {
       const { id } = req.params;
 
       const result = await destinationCollection.findOne({
@@ -78,7 +79,7 @@ async function run() {
       res.json(result);
     });
 
-    app.patch("/destination/:id", async (req, res) => {
+    app.patch("/facility/:id", async (req, res) => {
       const { id } = req.params;
       const updatedData = req.body;
       console.log(updatedData);
@@ -91,7 +92,7 @@ async function run() {
       res.json(result);
     });
 
-    app.delete("/destination/:id", async (req, res) => {
+    app.delete("/facility/:id", async (req, res) => {
       const { id } = req.params;
       const result = await destinationCollection.deleteOne({
         _id: new ObjectId(id),
